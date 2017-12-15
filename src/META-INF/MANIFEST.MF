@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: commons-validator-1.6.jar commons-lang3-3.6.jar jcalendar-
+ 1.4.jar jide-oss-3.6.18.jar guava-22.0.jar
+

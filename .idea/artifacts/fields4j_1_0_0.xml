@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="fields4j-1.0.0">
+    <output-path>$PROJECT_DIR$/out/artifacts/fields4j_1_0_0</output-path>
+    <root id="root">
+      <element id="archive" name="fields4j-1.0.0.jar">
+        <element id="module-output" name="fields4j" />
+      </element>
+      <element id="library" level="project" name="commons-validator-1.6" />
+      <element id="library" level="project" name="commons-lang3-3.6" />
+      <element id="library" level="project" name="jcalendar-1.4" />
+      <element id="library" level="project" name="jide-oss-3.6.18" />
+      <element id="library" level="project" name="guava-22.0" />
+    </root>
+  </artifact>
+</component>
