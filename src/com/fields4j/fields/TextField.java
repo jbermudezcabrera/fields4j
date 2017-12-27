@@ -23,6 +23,7 @@ public class TextField extends Field<JScrollPane, JTextArea, String> {
     getMainComponent().setBorder(BorderFactory.createEmptyBorder());
 
     getValueComponent().setLineWrap(true);
+    getValueComponent().setWrapStyleWord(true);
     getValueComponent().setRows(3);
 
     // transfer focus when tab is pressed instead of print the tab character
