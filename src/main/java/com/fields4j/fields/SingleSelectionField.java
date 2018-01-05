@@ -72,6 +72,33 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
 
     changeListener = evt -> {
       if ("value".equalsIgnoreCase(evt.getPropertyName())) {
+
+        if (transientItem != null && Objects.equals(evt.getOldValue(), transientItem)) {
+          // se deselecciono el transientItem
+
+          String title = BUNDLE.getString("transientRemovalWarning.title");
+          String format = BUNDLE.getString("transientRemovalWarning.format");
+          String message = String.format(format, transientItem);
+
+          Window parentWindow = SwingUtilities.getWindowAncestor(this);
+          int choice = JOptionPane.showConfirmDialog(parentWindow, message, title, JOptionPane.OK_CANCEL_OPTION,
+                                                     JOptionPane.QUESTION_MESSAGE);
+
+          if ((choice == JOptionPane.CANCEL_OPTION) || (choice == JOptionPane.CLOSED_OPTION)) {
+            // desactivar temporalmente el PropertyChangeListener para no publicar los cambios q se van a realizar
+            valueComponent.removePropertyChangeListener(changeListener);
+
+            // volver a seleccionar el transientItem ya que el usuario decidio no cambiar la seleccion
+            setValue(transientItem);
+
+            // volver a activar el PropertyChangeListener
+            valueComponent.addPropertyChangeListener(changeListener);
+
+            // no se propaga el cambio de valor
+            return;
+          }
+        }
+
         removeTransientItemIfNeeded();
         fireValueChangeEvent(null, getValue());
       }
