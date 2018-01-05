@@ -38,11 +38,9 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
 
   private CustomDefaultFormatter formatter;
 
-  private CustomListDataIntelliHints<V> intelliHints
-                                                    = new CustomListDataIntelliHints<>
-                                                          (getValueComponent(),
-                                                                                       new ArrayList<>());
-  private JButton                       arrowButton = new BasicArrowButton(SwingConstants.SOUTH);
+  private CustomListDataIntelliHints<V> intelliHints = new CustomListDataIntelliHints<>(getValueComponent(), new ArrayList<>());
+
+  private JButton arrowButton = new BasicArrowButton(SwingConstants.SOUTH);
 
   /** Crea un nuevo {@code SingleSelectionField} sin la opción de agregar un elemento. */
   public SingleSelectionField() {
@@ -52,7 +50,7 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
   /**
    * Crea un nuevo {@code SingleSelectionField}. Si {@code addOptionVisible} es {@code true} se
    * muestra un botón que permite insertar un nuevo elemento; la acción que se realizará cuando se
-   * presiones este botón puede establecerse usando {@link #setAddOptionListener(ActionListener)}.
+   * presione este botón puede establecerse usando {@link #setAddOptionListener(ActionListener)}.
    *
    * @param addOptionVisible si es {@code true} se muestra un botón que permite insertar un nuevo
    *                         elemento.
@@ -88,7 +86,7 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
       }
     });
 
-    valueComponent.addPropertyChangeListener("value", changeListener);
+    valueComponent.addPropertyChangeListener(changeListener);
 
     String iconPath = "/com/fields4j/resources/images/agregar-valor.png";
     addOptionButton = new JButton(FieldUtils.getIcon(iconPath));
