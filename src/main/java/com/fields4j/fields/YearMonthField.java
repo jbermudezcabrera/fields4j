@@ -32,7 +32,18 @@ public class YearMonthField extends Field<JPanel, JPanel, LocalDate> {
     valueComponent.add(yearField.getValueComponent(), BorderLayout.WEST);
     valueComponent.add(ssfMonths, BorderLayout.CENTER);
 
-    yearField.addValueChangeListener(event -> fireValueChangeEvent(null, null));
+    yearField.addValueChangeListener(event -> {
+      // resetar el valor del mes si no se selecciono ningun año
+      if(yearField.isBlankItemSelected()){
+        monthField.resetState();
+      }
+
+      // solo se puede seleccionar un mes si se selecciono un año primero
+      monthField.setEditable(!yearField.isEmpty());
+
+      fireValueChangeEvent(null, null);
+    });
+
     monthField.addValueChangeListener(event -> fireValueChangeEvent(null, null));
 
     // se establece un valor valido para que el componente adquiera un tamaño adecuado
