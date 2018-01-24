@@ -1,12 +1,13 @@
 package com.fields4j.fields;
 
+import java.awt.event.ItemEvent;
+import javax.swing.JCheckBox;
+
 import com.fields4j.core.Field;
 import com.fields4j.core.FieldStyle;
 
-import javax.swing.*;
-import java.awt.event.ItemEvent;
-
 public class BooleanField extends Field<JCheckBox, JCheckBox, Boolean> {
+
   public BooleanField() {
     super(new JCheckBox());
     setInitialValue(false);
@@ -20,8 +21,7 @@ public class BooleanField extends Field<JCheckBox, JCheckBox, Boolean> {
       if (event.getStateChange() == ItemEvent.SELECTED) {
         oldV = false;
         newV = true;
-      }
-      else {
+      } else {
         oldV = true;
         newV = false;
       }
@@ -37,20 +37,6 @@ public class BooleanField extends Field<JCheckBox, JCheckBox, Boolean> {
     valueComponent.setFont(fieldStyle.getLabelFont());
     valueComponent.setForeground(fieldStyle.getLabelForeground());
     valueComponent.setBackground(fieldStyle.getLabelBackground());
-  }
-
-  @Override
-  public void setEnabled(boolean enabled) {
-    super.setEnabled(enabled);
-
-    JCheckBox valueComponent = getValueComponent();
-
-    if (enabled) {
-      valueComponent.setForeground(getFieldStyle().getLabelForeground());
-    }
-    else {
-      valueComponent.setForeground(getFieldStyle().getDisabledFieldForeground());
-    }
   }
 
   @Override
@@ -78,6 +64,18 @@ public class BooleanField extends Field<JCheckBox, JCheckBox, Boolean> {
   public void setLabelsVisible(boolean labelsVisible) {
   }
 
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+
+    JCheckBox valueComponent = getValueComponent();
+
+    if (enabled) {
+      valueComponent.setForeground(getFieldStyle().getLabelForeground());
+    } else {
+      valueComponent.setForeground(getFieldStyle().getDisabledFieldForeground());
+    }
+  }
 
   @Override
   public boolean isRequired() {
@@ -95,14 +93,13 @@ public class BooleanField extends Field<JCheckBox, JCheckBox, Boolean> {
 
   @Override
   public void setText(String text) {
-    JCheckBox checkBox      = getValueComponent();
-    int       mnemonicIndex = getMnemonicIndex(text);
+    JCheckBox checkBox = getValueComponent();
+    int mnemonicIndex = getMnemonicIndex(text);
 
     if (mnemonicIndex >= 0) {
       checkBox.setText(text.replaceFirst("&", ""));
       checkBox.setDisplayedMnemonicIndex(mnemonicIndex);
-    }
-    else {
+    } else {
       checkBox.setText(text);
 
       if (!text.isEmpty()) {

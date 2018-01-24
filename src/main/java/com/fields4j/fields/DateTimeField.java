@@ -1,14 +1,15 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import javax.swing.JPanel;
+
+import com.fields4j.core.Field;
 
 public class DateTimeField extends Field<JPanel, JPanel, LocalDateTime> {
+
   private DateField dateField;
   private TimeField timeField;
 

@@ -5,6 +5,7 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 
 /** Verifica que el valor tenga el formato de una dirección IPv4. */
 public class IPv4Validator extends RegExpValidator {
+
   public IPv4Validator() {
     this("");
     setMessage(getBundle().getString("ipV4Error"));

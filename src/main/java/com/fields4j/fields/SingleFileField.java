@@ -1,18 +1,21 @@
 package com.fields4j.fields;
 
-import com.fields4j.FieldUtils;
-import com.fields4j.core.Field;
-import com.google.common.base.Strings;
-import com.jidesoft.swing.JideBoxLayout;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
+
+import com.fields4j.FieldUtils;
+import com.fields4j.core.Field;
+import com.google.common.base.Strings;
+import com.jidesoft.swing.JideBoxLayout;
 
 public class SingleFileField extends Field<JPanel, StringField, String> {
 
@@ -27,8 +30,8 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
 
   private ActionListener viewFileActionListener = null;
 
-  private List<FileFilter> fileFilters        = new ArrayList<>();
-  private boolean          useAcceptAllFilter = true;
+  private List<FileFilter> fileFilters = new ArrayList<>();
+  private boolean useAcceptAllFilter = true;
 
   public SingleFileField() {
     super(new JPanel(new BorderLayout(5, 0)), new StringField());
@@ -143,7 +146,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
   }
 
   private JButton createDeleteButton() {
-    String iconPath         = "/com/fields4j/resources/images/eliminar.png";
+    String iconPath = "/com/fields4j/resources/images/eliminar.png";
     String rolloverIconPath = "/com/fields4j/resources/images/eliminar-rollover.png";
 
     JButton button = new JButton(FieldUtils.getIcon(iconPath));
@@ -167,7 +170,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
   }
 
   private JButton createViewButton() {
-    String iconPath         = "/com/fields4j/resources/images/view.png";
+    String iconPath = "/com/fields4j/resources/images/view.png";
     String rolloverIconPath = "/com/fields4j/resources/images/view-rollover.png";
 
     JButton button = new JButton(FieldUtils.getIcon(iconPath));

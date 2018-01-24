@@ -1,25 +1,27 @@
 package com.fields4j.core;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.Icon;
+import javax.swing.UIManager;
 
 public class DefaultFieldStyle implements FieldStyle {
 
-  private Color fieldBackground         = UIManager.getDefaults().getColor("Panel.background");
+  private Color fieldBackground = UIManager.getDefaults().getColor("Panel.background");
   private Color disabledFieldForeground = UIManager.getDefaults().getColor(
       "Label.disabledForeground");
 
   private Color textBackground = fieldBackground;
   private Color textForeground = UIManager.getDefaults().getColor("Label.foreground");
-  private Font  textFont       = UIManager.getDefaults().getFont("Label.font");
+  private Font textFont = UIManager.getDefaults().getFont("Label.font");
 
-  private Color  requiredMarkBackground = fieldBackground;
-  private Color  requiredMarkForeground = Color.RED;
-  private Font   requiredMarkFont       = UIManager.getDefaults().getFont("Label.font");
-  private String requiredMarkText       = " *";
-  private Icon   requiredMarkIcon       = null;
+  private Color requiredMarkBackground = fieldBackground;
+  private Color requiredMarkForeground = Color.RED;
+  private Font requiredMarkFont = UIManager.getDefaults().getFont("Label.font");
+  private String requiredMarkText = " *";
+  private Icon requiredMarkIcon = null;
 
-  private Font  valueComponentFont       = UIManager.getDefaults().getFont("TextField.font");
+  private Font valueComponentFont = UIManager.getDefaults().getFont("TextField.font");
   private Color valueComponentBackground = UIManager.getDefaults().getColor("TextField.background");
   private Color valueComponentForeground = UIManager.getDefaults().getColor("TextField.foreground");
 

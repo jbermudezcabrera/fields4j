@@ -1,13 +1,16 @@
 package com.fields4j.fields;
 
+import java.awt.BorderLayout;
+import java.io.File;
+import java.util.ResourceBundle;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import com.fields4j.FieldUtils;
 import com.fields4j.core.Field;
 import com.jidesoft.swing.JideBoxLayout;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.util.ResourceBundle;
 
 public class DirectorySelectionField extends Field<JPanel, StringField, String> {
 
@@ -93,7 +96,7 @@ public class DirectorySelectionField extends Field<JPanel, StringField, String> 
   }
 
   private JButton createBrowseButton() {
-    String iconPath         = "/com/fields4j/resources/images/buscar.png";
+    String iconPath = "/com/fields4j/resources/images/buscar.png";
     String rolloverIconPath = "/com/fields4j/resources/images/buscar-rollover.png";
 
     JButton button = new JButton();

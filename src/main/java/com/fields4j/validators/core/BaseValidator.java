@@ -3,7 +3,8 @@ package com.fields4j.validators.core;
 import java.util.ResourceBundle;
 
 /** Implementa funcionalidades básicas para la mayoría de los validadores. */
-public abstract class BaseValidator <T> implements Validator<T> {
+public abstract class BaseValidator<T> implements Validator<T> {
+
   private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
       "com/fields4j/validators/resources/Validator");
 

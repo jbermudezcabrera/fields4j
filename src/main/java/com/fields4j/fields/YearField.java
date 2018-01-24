@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class YearField extends SingleSelectionField<Integer> {
+
   private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
       "com/fields4j/resources/YearField");
 

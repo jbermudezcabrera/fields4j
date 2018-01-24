@@ -1,14 +1,5 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-import com.fields4j.validators.core.BaseValidator;
-import com.fields4j.validators.core.ValidationException;
-import com.fields4j.validators.core.Validator;
-import com.toedter.calendar.IDateEditor;
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JSpinnerDateEditor;
-
-import javax.swing.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.SimpleDateFormat;
@@ -20,9 +11,21 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
+import javax.swing.SwingConstants;
+
+import com.fields4j.core.Field;
+import com.fields4j.validators.core.BaseValidator;
+import com.fields4j.validators.core.ValidationException;
+import com.fields4j.validators.core.Validator;
+import com.toedter.calendar.IDateEditor;
+import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JSpinnerDateEditor;
 
 @SuppressWarnings("UseOfObsoleteDateTimeApi")
 public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
+
   public static SimpleDateFormat DATE_FORMAT = null;
 
   // indica si el usuario establecio explicitamente una fecha minima diferente de null
@@ -80,8 +83,7 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
 
     if (format == null) {
       editor.setDateFormatString(null);
-    }
-    else {
+    } else {
       editor.setDateFormatString(format.toPattern());
     }
 
@@ -133,12 +135,12 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
 
   @Override
   public LocalDate getValue() {
-    JSpinner            spinner       = (JSpinner) getValueComponent().getDateEditor()
-                                                                      .getUiComponent();
+    JSpinner spinner = (JSpinner) getValueComponent().getDateEditor()
+                                                     .getUiComponent();
     JSpinner.DateEditor spinnerEditor = (JSpinner.DateEditor) spinner.getEditor();
 
     String renderedDate = spinnerEditor.getTextField().getText();
-    Date   internalDate = getValueComponent().getDate();
+    Date internalDate = getValueComponent().getDate();
 
     /*
     este chequeo es necesario porque SpinnerDateModel inicia con la fecha actual como valor;
@@ -161,15 +163,14 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
     estableciendo explicitamente la fecha, ya q en algunos casos se actualiza internamente
     pero no se visualiza.
     */
-    JSpinner            spinner                = (JSpinner) getValueComponent().getDateEditor()
-                                                                               .getUiComponent();
-    JSpinner.DateEditor spinnerEditor          = (JSpinner.DateEditor) spinner.getEditor();
+    JSpinner spinner = (JSpinner) getValueComponent().getDateEditor()
+                                                     .getUiComponent();
+    JSpinner.DateEditor spinnerEditor = (JSpinner.DateEditor) spinner.getEditor();
     JFormattedTextField spinnerEditorTextField = spinnerEditor.getTextField();
 
     if (date == null) {
       spinnerEditorTextField.setText("");
-    }
-    else {
+    } else {
       spinnerEditorTextField.setText(spinnerEditor.getFormat().format(date));
       /*
       actualizar la validacion del campo ya q existia inconsistencia entre su valor y su
@@ -186,18 +187,18 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
   }
 
   @Override
+  public void resetState() {
+    setValue(null);
+    super.resetState();
+  }
+
+  @Override
   public void setToolTipText(String text) {
     super.setToolTipText(text);
     IDateEditor editor = getValueComponent().getDateEditor();
 
     JSpinner spinner = (JSpinner) editor.getUiComponent();
     spinner.setToolTipText(text);
-  }
-
-  @Override
-  public void resetState() {
-    setValue(null);
-    super.resetState();
   }
 
   private void setupDateRangeValidator() {
@@ -216,11 +217,11 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
           String maxDateStr = maxDateExplicitlySet ? dateFormat.format(toDate(maxDate)) : "";
 
           boolean isBeforeMin = minDateExplicitlySet && value.isBefore(minDate);
-          boolean isAfterMax  = maxDateExplicitlySet && value.isAfter(maxDate);
+          boolean isAfterMax = maxDateExplicitlySet && value.isAfter(maxDate);
 
           if (isBeforeMin) {
             String messageFormat = bundle.getString("minDateErrorFormat");
-            String message       = String.format(messageFormat, minDateStr);
+            String message = String.format(messageFormat, minDateStr);
 
             if (maxDateExplicitlySet) {
               messageFormat = bundle.getString("minMaxDateErrorFormat");
@@ -232,7 +233,7 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
 
           if (isAfterMax) {
             String messageFormat = bundle.getString("maxDateErrorFormat");
-            String message       = String.format(messageFormat, maxDateStr);
+            String message = String.format(messageFormat, maxDateStr);
 
             if (minDateExplicitlySet) {
               messageFormat = bundle.getString("minMaxDateErrorFormat");
@@ -251,7 +252,7 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
   private void setupFocusBehavior() {
     IDateEditor editor = getValueComponent().getDateEditor();
 
-    JSpinner            spinner       = (JSpinner) editor.getUiComponent();
+    JSpinner spinner = (JSpinner) editor.getUiComponent();
     JSpinner.DateEditor spinnerEditor = (JSpinner.DateEditor) spinner.getEditor();
 
     /*
@@ -277,14 +278,14 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
   }
 
   private LocalDate toLocalDate(Date date) {
-    Instant       instant       = date.toInstant();
+    Instant instant = date.toInstant();
     ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
     return zonedDateTime.toLocalDate();
   }
 
   private Date toDate(LocalDate localDate) {
     ZonedDateTime zonedDateTime = localDate.atStartOfDay(ZoneId.systemDefault());
-    Instant       instant       = zonedDateTime.toInstant();
+    Instant instant = zonedDateTime.toInstant();
     return Date.from(instant);
   }
 
@@ -294,7 +295,7 @@ public class DateField extends Field<JDateChooser, JDateChooser, LocalDate> {
     LocalDate minDate = getMinDate();
     LocalDate maxDate = getMaxDate();
 
-    boolean isMinAfterToday  = (minDate != null) && minDate.isAfter(today);
+    boolean isMinAfterToday = (minDate != null) && minDate.isAfter(today);
     boolean isMaxBeforeToday = (maxDate != null) && maxDate.isBefore(today);
 
     boolean isTodayValid = !isMinAfterToday && !isMaxBeforeToday;

@@ -1,12 +1,15 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-import com.fields4j.validators.LengthValidator;
-
-import javax.swing.*;
+import java.awt.KeyboardFocusManager;
+import javax.swing.BorderFactory;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+
+import com.fields4j.core.Field;
+import com.fields4j.validators.LengthValidator;
 
 public class TextField extends Field<JScrollPane, JTextArea, String> {
 
@@ -70,6 +73,12 @@ public class TextField extends Field<JScrollPane, JTextArea, String> {
     getValueComponent().setText(value);
   }
 
+  @Override
+  public void resetState() {
+    setValue("");
+    super.resetState();
+  }
+
   public int getMinLength() {
     return lengthValidator.getMinLength();
   }
@@ -88,11 +97,5 @@ public class TextField extends Field<JScrollPane, JTextArea, String> {
     lengthValidator.setMaxLength(value);
 
     validateField();
-  }
-
-  @Override
-  public void resetState() {
-    setValue("");
-    super.resetState();
   }
 }

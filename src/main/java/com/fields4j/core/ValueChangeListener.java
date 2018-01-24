@@ -8,13 +8,13 @@ import java.util.EventListener;
  *
  * @param <V> el tipo de los valores contenidos en los {@code ValueChangeEvent} esperados
  */
-public interface ValueChangeListener<V> extends EventListener{
+public interface ValueChangeListener<V> extends EventListener {
 
   /**
    * Este método es invocado cuando el valor del campo cambia.
    *
    * @param event un objeto {@link ValueChangeEvent} que describe la fuente del evento y el valor
-   *     viejo y nuevo.
+   *              viejo y nuevo.
    */
   void valueChanged(ValueChangeEvent<V> event);
 }

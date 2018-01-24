@@ -1,28 +1,32 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-import com.fields4j.core.FieldStyle;
-import com.fields4j.validators.LengthValidator;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicTextFieldUI;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Objects;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicTextFieldUI;
+import javax.swing.text.JTextComponent;
+
+import com.fields4j.core.Field;
+import com.fields4j.core.FieldStyle;
+import com.fields4j.validators.LengthValidator;
 
 public class StringField extends Field<JTextField, JTextField, String> {
-  public static final int LEFT     = JTextField.LEFT;
-  public static final int RIGHT    = JTextField.RIGHT;
-  public static final int CENTER   = JTextField.CENTER;
-  public static final int LEADING  = JTextField.LEADING;
+
+  public static final int LEFT = JTextField.LEFT;
+  public static final int RIGHT = JTextField.RIGHT;
+  public static final int CENTER = JTextField.CENTER;
+  public static final int LEADING = JTextField.LEADING;
   public static final int TRAILING = JTextField.TRAILING;
 
-  private LengthValidator  lengthValidator;
+  private LengthValidator lengthValidator;
   private JTextFieldHintUI textFieldHintUI;
 
   public StringField() {
@@ -147,10 +151,11 @@ public class StringField extends Field<JTextField, JTextField, String> {
 }
 
 final class JTextFieldHintUI extends BasicTextFieldUI implements FocusListener {
+
   private String hint;
-  private Color  hintColor;
-  private Font   hintFont;
-  private Field  field;
+  private Color hintColor;
+  private Font hintFont;
+  private Field field;
 
   JTextFieldHintUI(Field field) {
     this.field = Objects.requireNonNull(field);
@@ -187,7 +192,7 @@ final class JTextFieldHintUI extends BasicTextFieldUI implements FocusListener {
 
     if (field.isEditable()) {
       component.setBackground(fieldStyle.getValueComponentBackground());
-    }else{
+    } else {
       component.setBackground(UIManager.getDefaults().getColor("TextField.disabledBackground"));
     }
 
@@ -201,7 +206,7 @@ final class JTextFieldHintUI extends BasicTextFieldUI implements FocusListener {
       }
 
       int padding = (component.getHeight() - component.getFont().getSize()) / 2;
-      int inset   = 3;
+      int inset = 3;
 
       g.drawString(hint, inset, component.getHeight() - padding - inset);
     }

@@ -1,11 +1,14 @@
 package com.fields4j;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public final class FieldUtils {
-  private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+
+  private static final ResourceBundle bundle = ResourceBundle.getBundle(
       "com/fields4j/resources/FieldUtils");
 
   private FieldUtils() {
@@ -27,7 +30,7 @@ public final class FieldUtils {
    * @param messages mensajes a mostrar, se mostrará uno por línea
    */
   public static void showInfo(String... messages) {
-    showInfo(BUNDLE.getString("information.title"), messages);
+    showInfo(bundle.getString("information.title"), messages);
   }
 
   /**

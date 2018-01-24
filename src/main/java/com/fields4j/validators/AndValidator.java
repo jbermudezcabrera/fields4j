@@ -1,10 +1,10 @@
 package com.fields4j.validators;
 
+import java.util.Objects;
+
 import com.fields4j.validators.core.BaseValidator;
 import com.fields4j.validators.core.ValidationException;
 import com.fields4j.validators.core.Validator;
-
-import java.util.Objects;
 
 public class AndValidator<T> extends BaseValidator<T> {
 

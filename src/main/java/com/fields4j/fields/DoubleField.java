@@ -1,12 +1,15 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-
-import javax.swing.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
+import com.fields4j.core.Field;
 
 public class DoubleField extends Field<JSpinner, JSpinner, Double> {
+
   public DoubleField() {
     super(new JSpinner(new SpinnerNumberModel(0.0, null, null, 1)));
     setInitialValue(0.0);

@@ -1,5 +1,29 @@
 package com.fields4j.fields;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.beans.PropertyChangeListener;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.text.JTextComponent;
+
 import com.fields4j.FieldUtils;
 import com.fields4j.core.Field;
 import com.google.common.collect.ImmutableList;
@@ -7,25 +31,14 @@ import com.jidesoft.hints.ListDataIntelliHints;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicArrowButton;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.beans.PropertyChangeListener;
-import java.text.ParseException;
-import java.util.*;
-import java.util.List;
-
 @SuppressWarnings("unchecked")
-public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField, V> {
+public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, V> {
+
   private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
       "com/fields4j/resources/SingleSelectionField");
 
   private boolean blankItemPresent;
-  private V      blankItem     = null;
+  private V blankItem = null;
   private String blankItemText = BUNDLE.getString("blankChoice.text");
 
   private V transientItem = null;
@@ -38,7 +51,8 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
 
   private CustomDefaultFormatter formatter;
 
-  private CustomListDataIntelliHints<V> intelliHints = new CustomListDataIntelliHints<>(getValueComponent(), new ArrayList<>());
+  private CustomListDataIntelliHints<V> intelliHints = new CustomListDataIntelliHints<>(
+      getValueComponent(), new ArrayList<>());
 
   private JButton arrowButton = new BasicArrowButton(SwingConstants.SOUTH);
 
@@ -81,7 +95,8 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
           String message = String.format(format, transientItem);
 
           Window parentWindow = SwingUtilities.getWindowAncestor(this);
-          int choice = JOptionPane.showConfirmDialog(parentWindow, message, title, JOptionPane.OK_CANCEL_OPTION,
+          int choice = JOptionPane.showConfirmDialog(parentWindow, message, title,
+                                                     JOptionPane.OK_CANCEL_OPTION,
                                                      JOptionPane.QUESTION_MESSAGE);
 
           if ((choice == JOptionPane.CANCEL_OPTION) || (choice == JOptionPane.CLOSED_OPTION)) {
@@ -130,7 +145,7 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
   @Override
   public Dimension getPreferredSize() {
     Comparator<V> lengthComparator = Comparator.comparing(v -> String.valueOf(v).length());
-    List<V>       completionList   = intelliHints.getCompletionList();
+    List<V> completionList = intelliHints.getCompletionList();
 
     if (completionList.isEmpty()) {
       return new JLabel(getClass().getSimpleName()).getPreferredSize();
@@ -170,7 +185,7 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
    */
   public final void setAddOptionVisible(boolean visible) {
     JPanel mainComponent = getMainComponent();
-    Color  background    = getFieldStyle().getMainComponentBackground();
+    Color background = getFieldStyle().getMainComponentBackground();
 
     mainComponent.removeAll();
     mainComponent.setLayout(new BorderLayout(visible ? 2 : 0, 0));
@@ -221,8 +236,7 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
 
     if (blankItemPresent) {
       blankItem = (V) blankItemText;
-    }
-    else {
+    } else {
       blankItem = null;
     }
   }
@@ -258,12 +272,11 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
   @Override
   public void setValue(V value) {
     JFormattedTextField valueComponent = getValueComponent();
-    List<V>             completionList = intelliHints.getCompletionList();
+    List<V> completionList = intelliHints.getCompletionList();
 
     if (completionList.contains(value)) {
       valueComponent.setValue(value);
-    }
-    else {
+    } else {
       transientItem = value;
 
       List<V> newCompletionList = new ArrayList<>(completionList);
@@ -356,8 +369,7 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
 
     if (blankItemPresent) {
       setValue(blankItem);
-    }
-    else {
+    } else {
       if (!items.isEmpty()) {
         setValue(items.get(0));
       }
@@ -424,6 +436,7 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
   }
 
   private static class CustomDefaultFormatter extends JFormattedTextField.AbstractFormatter {
+
     private List acceptedValues = new ArrayList<>();
 
     @Override
@@ -452,12 +465,13 @@ public class SingleSelectionField <V> extends Field<JPanel, JFormattedTextField,
   }
 }
 
-class CustomListDataIntelliHints <E> extends ListDataIntelliHints<E> {
+class CustomListDataIntelliHints<E> extends ListDataIntelliHints<E> {
+
   private DefaultListCellRenderer listCellRenderer;
 
   private MatchMode matchMode = MatchMode.STARTS_WTIH;
 
-  private Font  font            = null;
+  private Font font = null;
   private Color foregroundColor = null;
 
   CustomListDataIntelliHints(JTextComponent comp, List<E> completionList) {
@@ -471,19 +485,19 @@ class CustomListDataIntelliHints <E> extends ListDataIntelliHints<E> {
         Component component = super.getListCellRendererComponent(list, value, index, isSelected,
                                                                  cellHasFocus);
 
-        Object context  = getContext();
+        Object context = getContext();
         String valueStr = "";
 
         if ((context != null) && (value != null)) {
           valueStr = value.toString();
 
           Pair<Integer, Integer> range = getMatchRange(valueStr, context.toString());
-          Integer                start = range.getLeft();
-          Integer                end   = range.getRight();
+          Integer start = range.getLeft();
+          Integer end = range.getRight();
 
           if ((start >= 0) && (end >= 0)) {
             String beforeMatch = valueStr.substring(0, start);
-            String afterMatch  = valueStr.substring(end);
+            String afterMatch = valueStr.substring(end);
 
             String match = valueStr.substring(start, end);
 
@@ -515,7 +529,7 @@ class CustomListDataIntelliHints <E> extends ListDataIntelliHints<E> {
   @Override
   public boolean updateHints(Object context) {
     if (context != null) {
-      String         contextStr    = context.toString();
+      String contextStr = context.toString();
       JTextComponent textComponent = getTextComponent();
 
       boolean allTextSelected = contextStr.equals(textComponent.getSelectedText());
@@ -531,7 +545,7 @@ class CustomListDataIntelliHints <E> extends ListDataIntelliHints<E> {
 
   @Override
   protected boolean compare(Object context, E element) {
-    String listEntry  = (element == null) ? "" : element.toString();
+    String listEntry = (element == null) ? "" : element.toString();
     String contextStr = context.toString();
 
     Pair<Integer, Integer> match = getMatchRange(listEntry, contextStr);
@@ -579,8 +593,7 @@ class CustomListDataIntelliHints <E> extends ListDataIntelliHints<E> {
 
     if (isCaseSensitive()) {
       start = str.indexOf(pattern);
-    }
-    else {
+    } else {
       start = StringUtils.indexOfIgnoreCase(str, pattern);
     }
 

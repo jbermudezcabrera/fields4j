@@ -1,13 +1,16 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-
-import javax.swing.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.DecimalFormat;
+import javax.swing.JFormattedTextField;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
+import com.fields4j.core.Field;
 
 public class IntegerField extends Field<JSpinner, JSpinner, Integer> {
+
   public static DecimalFormat DECIMAL_FORMAT = null;
 
   public IntegerField() {

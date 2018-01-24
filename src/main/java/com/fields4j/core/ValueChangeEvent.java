@@ -26,7 +26,7 @@ public class ValueChangeEvent<V> {
    * quiere decir que {@link #getNewValue()} devolverá {@code null} solamente si ese es el nuevo
    * valor del campo.
    *
-   * @param source campo donde se originó el evento
+   * @param source   campo donde se originó el evento
    * @param oldValue valor antes del cambio, puede ser {@code null}
    * @param newValue nuevo valor, puede ser {@code null}
    */

@@ -1,16 +1,23 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-
-import javax.swing.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Objects;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+
+import com.fields4j.core.Field;
 
 @SuppressWarnings("UseOfObsoleteDateTimeApi")
 public class TimeField extends Field<JSpinner, JSpinner, LocalTime> {
+
   public TimeField() {
     super(new JSpinner(new SpinnerDateModel()));
 

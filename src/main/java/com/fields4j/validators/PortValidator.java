@@ -8,19 +8,20 @@ import com.fields4j.validators.core.ValidationException;
  * sea algún puerto reservado o con algún propósito específico.
  */
 public class PortValidator extends BaseValidator<Integer> {
-    public PortValidator() {
-        this("");
-        setMessage(getBundle().getString("portRangeError"));
-    }
 
-    public PortValidator(String message) {
-        super(message);
-    }
+  public PortValidator() {
+    this("");
+    setMessage(getBundle().getString("portRangeError"));
+  }
 
-    @Override
-    public void validate(Integer value) throws ValidationException {
-        if ((value < 0) || (value > 65535)) {
-            throw new ValidationException(getMessage());
-        }
+  public PortValidator(String message) {
+    super(message);
+  }
+
+  @Override
+  public void validate(Integer value) throws ValidationException {
+    if ((value < 0) || (value > 65535)) {
+      throw new ValidationException(getMessage());
     }
+  }
 }

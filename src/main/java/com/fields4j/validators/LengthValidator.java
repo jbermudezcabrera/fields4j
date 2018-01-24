@@ -1,14 +1,15 @@
 package com.fields4j.validators;
 
+import java.util.ResourceBundle;
+
 import com.fields4j.validators.core.BaseValidator;
 import com.fields4j.validators.core.ValidationException;
-
-import java.util.ResourceBundle;
 
 /**
  * Clase que realiza una validación de la longitud mínima y máxima de una cadena.
  */
 public class LengthValidator extends BaseValidator<String> {
+
   private int minLength;
   private int maxLength;
 

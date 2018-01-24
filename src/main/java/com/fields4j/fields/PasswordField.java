@@ -1,22 +1,25 @@
 package com.fields4j.fields;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.ResourceBundle;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import com.fields4j.FieldUtils;
 import com.fields4j.core.Field;
 import com.fields4j.validators.PasswordValidator;
 import com.fields4j.validators.core.ValidationException;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.ResourceBundle;
-
 public class PasswordField extends Field<JPanel, JPasswordField, String> {
+
   private PasswordValidator passwordValidator;
-  private JButton           suggestPasswordBtn;
+  private JButton suggestPasswordBtn;
   private ActionListener listener = null;
 
   public PasswordField() {
@@ -47,7 +50,7 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
   @Override
   public String getValue() {
     char[] characters = getValueComponent().getPassword();
-    String password   = String.valueOf(characters);
+    String password = String.valueOf(characters);
 
     // recomendado por la documentacion del metodo getPassword()
     Arrays.fill(characters, '0');
@@ -85,7 +88,7 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
   }
 
   private void initButton() {
-    String iconPath         = "/com/fields4j/resources/images/generarClave.png";
+    String iconPath = "/com/fields4j/resources/images/generarClave.png";
     String rolloverIconPath = "/com/fields4j/resources/images/generarClave-rollover.png";
 
     suggestPasswordBtn = new JButton(FieldUtils.getIcon(iconPath));
@@ -97,7 +100,7 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
 
     setSuggestPasswordListener(e -> {
       String suggestion = getPasswordSuggestion();
-      String format     = bundle.getString("passwordSuggestionFormat");
+      String format = bundle.getString("passwordSuggestionFormat");
 
       FieldUtils.showInfo(String.format(format, suggestion));
       setValue(suggestion);
@@ -133,14 +136,14 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
       char[] password = new char[passwordValidator.getMinLength()];
 
       String letters = "abcdefghijklmnpqrstuvwxyz";
-      String digits  = "123456789";
+      String digits = "123456789";
 
       if (passwordValidator.isUpperLetterRequired()) {
         letters = letters.toUpperCase();
       }
 
       char[] characters = (letters + digits).toCharArray();
-      Random random     = new Random();
+      Random random = new Random();
 
       for (int i = 0; i < password.length; i++) {
         int charIndex = random.nextInt(characters.length);

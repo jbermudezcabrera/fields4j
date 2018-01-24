@@ -1,9 +1,11 @@
 package com.fields4j.core;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.Icon;
 
 public interface FieldStyle {
+
   Color getFieldBackground();
 
   Color getDisabledFieldForeground();

@@ -1,18 +1,27 @@
 package com.fields4j.core;
 
-import com.fields4j.validators.core.ValidationException;
-import com.fields4j.validators.core.Validator;
-import com.google.common.base.Strings;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.TextField;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
+import javax.swing.border.Border;
+
+import com.fields4j.validators.core.ValidationException;
+import com.fields4j.validators.core.Validator;
+import com.google.common.base.Strings;
 
 /**
  * Componente para representar un campo de un formulario. Un campo está compuesto por:
@@ -33,7 +42,7 @@ import java.util.ResourceBundle;
  * @param <VC> el tipo del componente usado para introducir el valor del campo.
  * @param <V>  el tipo de los valores que se pueden obtener de este campo.
  */
-public abstract class Field <MC extends JComponent, VC extends JComponent, V> extends JPanel
+public abstract class Field<MC extends JComponent, VC extends JComponent, V> extends JPanel
     implements ValueChangeListener<V> {
 
   private static final ResourceBundle FIELD_BUNDLE = ResourceBundle.getBundle(
@@ -43,7 +52,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
 
   protected Border defaultBorder;
 
-  private JLabel textLabel     = new JLabel();
+  private JLabel textLabel = new JLabel();
   private JLabel requiredLabel = new JLabel();
 
   private MC mainComponent;
@@ -54,7 +63,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
   private String tooltipBackup = null;
 
   private List<Validator<V>> validators = new ArrayList<>();
-  private boolean isRequired            = false;
+  private boolean isRequired = false;
 
   private V initialValue;
 
@@ -97,14 +106,14 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
     textLabel.setLabelFor(this.valueComponent);
     requiredLabel.setFocusable(false);
 
-    this.horizontal = false;
+    horizontal = false;
 
-    this.labelsVisible = true;
-    this.textLabel.setVisible(true);
-    this.requiredLabel.setVisible(true);
+    labelsVisible = true;
+    textLabel.setVisible(true);
+    requiredLabel.setVisible(true);
 
-    String text          = getClass().getSimpleName();
-    int    mnemonicIndex = getMnemonicIndex(text);
+    String text = getClass().getSimpleName();
+    int mnemonicIndex = getMnemonicIndex(text);
 
     setTextWithMnemonic(text, mnemonicIndex);
     this.valueComponent.setEnabled(true);
@@ -160,8 +169,8 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
    */
   public void setLabelsVisible(boolean labelsVisible) {
     this.labelsVisible = labelsVisible;
-    this.textLabel.setVisible(labelsVisible);
-    this.requiredLabel.setVisible(labelsVisible);
+    textLabel.setVisible(labelsVisible);
+    requiredLabel.setVisible(labelsVisible);
 
     updateLayout();
   }
@@ -182,8 +191,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
     if (enabled) {
       textLabel.setForeground(fieldStyle.getLabelForeground());
       requiredLabel.setForeground(fieldStyle.getRequiredMarkForeground());
-    }
-    else {
+    } else {
       textLabel.setForeground(fieldStyle.getDisabledFieldForeground());
       requiredLabel.setForeground(fieldStyle.getDisabledFieldForeground());
     }
@@ -254,10 +262,10 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
   public void setRequired(boolean required) {
     isRequired = required;
 
-    if(isRequired) {
+    if (isRequired) {
       requiredLabel.setIcon(fieldStyle.getRequiredMarkIcon());
       requiredLabel.setText(fieldStyle.getRequiredMarkText());
-    }else{
+    } else {
       requiredLabel.setIcon(null);
       requiredLabel.setText("");
     }
@@ -331,8 +339,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
 
     if (result.isValid()) {
       renderCorrectState();
-    }
-    else {
+    } else {
       renderErrorState(result.getCause().getMessage());
     }
 
@@ -426,8 +433,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
     if (isEnabled()) {
       textLabel.setForeground(fieldStyle.getLabelForeground());
       requiredLabel.setForeground(fieldStyle.getRequiredMarkForeground());
-    }
-    else {
+    } else {
       textLabel.setForeground(fieldStyle.getDisabledFieldForeground());
       requiredLabel.setForeground(fieldStyle.getDisabledFieldForeground());
     }
@@ -449,7 +455,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
     ValueChangeEvent<V> event = new ValueChangeEvent<>(this, oldValue, newValue);
 
     // siempre notificar primero a esta misma clase para evitar valores de validacion incorrectos
-    this.valueChanged(event);
+    valueChanged(event);
 
     for (ValueChangeListener listener : listenerList.getListeners(ValueChangeListener.class)) {
       listener.valueChanged(event);
@@ -470,8 +476,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
       textLabel.setText(text.replaceFirst("&", ""));
       textLabel.setDisplayedMnemonic(text.charAt(mnemonicIndex));
       textLabel.setDisplayedMnemonicIndex(mnemonicIndex);
-    }
-    else {
+    } else {
       textLabel.setText(text);
 
       if (!text.isEmpty()) {
@@ -495,8 +500,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
 
     if (isHorizontal()) {
       setLayout(new BorderLayout(5, 0));
-    }
-    else {
+    } else {
       setLayout(new BorderLayout());
     }
 
@@ -519,8 +523,7 @@ public abstract class Field <MC extends JComponent, VC extends JComponent, V> ex
 
         result = new ValidationResult(new ValidationException(reason));
 
-      }
-      else {
+      } else {
         // si el campo es opcional y esta vacio entonces no hay informacion que validar.
         result = new ValidationResult();
       }

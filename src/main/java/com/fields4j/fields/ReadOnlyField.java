@@ -1,13 +1,14 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-
-import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.text.Format;
 import java.util.function.Function;
+import javax.swing.JFormattedTextField;
+
+import com.fields4j.core.Field;
 
 public class ReadOnlyField extends Field<JFormattedTextField, JFormattedTextField, Object> {
+
   public static final int LEFT = JFormattedTextField.LEFT;
   public static final int RIGHT = JFormattedTextField.RIGHT;
   public static final int CENTER = JFormattedTextField.CENTER;
@@ -68,17 +69,18 @@ public class ReadOnlyField extends Field<JFormattedTextField, JFormattedTextFiel
   }
 
   @Override
-  public void setEditable(boolean editable) {}
+  public void setEditable(boolean editable) {
+  }
 
   /**
    * Devuelve la alineación horizontal del texto. Los valores válidos son:
    *
    * <ul>
-   *   <li>{@code ReadOnlyField.LEFT}
-   *   <li>{@code ReadOnlyField.CENTER}
-   *   <li>{@code ReadOnlyField.RIGHT}
-   *   <li>{@code ReadOnlyField.LEADING}
-   *   <li>{@code ReadOnlyField.TRAILING}
+   * <li>{@code ReadOnlyField.LEFT}
+   * <li>{@code ReadOnlyField.CENTER}
+   * <li>{@code ReadOnlyField.RIGHT}
+   * <li>{@code ReadOnlyField.LEADING}
+   * <li>{@code ReadOnlyField.TRAILING}
    * </ul>
    *
    * @return la alineación horizontal del texto
@@ -91,15 +93,16 @@ public class ReadOnlyField extends Field<JFormattedTextField, JFormattedTextFiel
    * Establece la alineación horizontal del texto. Los valores válidos son:
    *
    * <ul>
-   *   <li>{@code ReadOnlyField.LEFT}
-   *   <li>{@code ReadOnlyField.CENTER}
-   *   <li>{@code ReadOnlyField.RIGHT}
-   *   <li>{@code ReadOnlyField.LEADING}
-   *   <li>{@code ReadOnlyField.TRAILING}
+   * <li>{@code ReadOnlyField.LEFT}
+   * <li>{@code ReadOnlyField.CENTER}
+   * <li>{@code ReadOnlyField.RIGHT}
+   * <li>{@code ReadOnlyField.LEADING}
+   * <li>{@code ReadOnlyField.TRAILING}
    * </ul>
    *
    * @param horizontalAlignment la alineación horizontal del texto
-   * @exception IllegalArgumentException si {@code horizontalAlignment} no es un valor válido
+   *
+   * @throws IllegalArgumentException si {@code horizontalAlignment} no es un valor válido
    */
   public void setHorizontalTextAlignment(int horizontalAlignment) {
     getValueComponent().setHorizontalAlignment(horizontalAlignment);
@@ -121,7 +124,7 @@ public class ReadOnlyField extends Field<JFormattedTextField, JFormattedTextFiel
    * debe mostrar.
    *
    * @param toStringFunction función a emplear para obtener la representación textual del valor del
-   *     campo, si es {@code null} establece el comportamiento por defecto.
+   *                         campo, si es {@code null} establece el comportamiento por defecto.
    */
   public void setToStringFunction(Function<Object, String> toStringFunction) {
     this.toStringFunction = (toStringFunction == null) ? Object::toString : toStringFunction;

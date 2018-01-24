@@ -4,6 +4,7 @@ import com.fields4j.validators.core.ValidationException;
 
 /** Clase para validar una dirección de correo. */
 public class EmailValidator extends RegExpValidator {
+
   public EmailValidator() {
     this("");
     setMessage(getBundle().getString("emailError"));

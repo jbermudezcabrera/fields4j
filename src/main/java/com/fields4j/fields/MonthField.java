@@ -1,12 +1,12 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import com.fields4j.core.Field;
 
 public class MonthField
     extends Field<SingleSelectionField<String>, SingleSelectionField<String>, Month> {
@@ -46,12 +46,6 @@ public class MonthField
   }
 
   @Override
-  public void setHorizontal(boolean horizontal) {
-    super.setHorizontal(horizontal);
-    getValueComponent().setHorizontal(horizontal);
-  }
-
-  @Override
   public void setEditable(boolean editable) {
     super.setEditable(editable);
     getValueComponent().setEditable(editable);
@@ -61,6 +55,12 @@ public class MonthField
   public void resetState() {
     super.resetState();
     getValueComponent().resetState();
+  }
+
+  @Override
+  public void setHorizontal(boolean horizontal) {
+    super.setHorizontal(horizontal);
+    getValueComponent().setHorizontal(horizontal);
   }
 
   public boolean isMonthOptional() {

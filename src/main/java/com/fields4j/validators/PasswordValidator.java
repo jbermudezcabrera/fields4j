@@ -1,13 +1,14 @@
 package com.fields4j.validators;
 
-import com.fields4j.validators.core.ValidationException;
-
 import java.util.ResourceBundle;
 
+import com.fields4j.validators.core.ValidationException;
+
 public class PasswordValidator extends RegExpValidator {
+
   private boolean digitRequired;
   private boolean upperLetterRequired;
-  private int     minLength;
+  private int minLength;
 
   /**
    * Contruye un validador que acepta la contraseña si tiene como mínimo 8 caracteres, contiene

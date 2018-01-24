@@ -4,6 +4,7 @@ import com.fields4j.validators.core.ValidationException;
 import com.google.common.collect.Lists;
 
 public class AlphanumericValidator extends RegExpValidator {
+
   private static final String CONTAINS_VALID_CHARS = "[\\p{L}\\p{Digit}\\p{Space}_#-]+";
   private static final String CONTAINS_LETTERS = ".*\\p{L}+.*";
 

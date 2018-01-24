@@ -1,8 +1,8 @@
 package com.fields4j.fields;
 
-import com.fields4j.validators.RegExpValidator;
-
 import java.util.ResourceBundle;
+
+import com.fields4j.validators.RegExpValidator;
 
 public class PersonNameField extends StringField {
 

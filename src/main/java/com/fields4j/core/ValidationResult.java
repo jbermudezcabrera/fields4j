@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /** Esta clase encapsula el resultado de un proceso de validación */
 public class ValidationResult {
+
   private boolean valid;
   private Throwable cause;
 

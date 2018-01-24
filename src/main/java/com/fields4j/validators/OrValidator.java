@@ -1,10 +1,10 @@
 package com.fields4j.validators;
 
+import java.util.Objects;
+
 import com.fields4j.validators.core.BaseValidator;
 import com.fields4j.validators.core.ValidationException;
 import com.fields4j.validators.core.Validator;
-
-import java.util.Objects;
 
 public class OrValidator<T> extends BaseValidator<T> {
 
@@ -28,7 +28,8 @@ public class OrValidator<T> extends BaseValidator<T> {
       try {
         validator.validate(value);
         return;
-      } catch (ValidationException e) {
+      }
+      catch (ValidationException e) {
         if (firstError == null) {
           firstError = e;
         }

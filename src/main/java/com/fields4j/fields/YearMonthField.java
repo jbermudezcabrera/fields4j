@@ -1,13 +1,15 @@
 package com.fields4j.fields;
 
-import com.fields4j.core.Field;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.time.LocalDate;
 import java.time.Month;
+import javax.swing.JPanel;
+
+import com.fields4j.core.Field;
 
 public class YearMonthField extends Field<JPanel, JPanel, LocalDate> {
+
   private YearField yearField;
   private MonthField monthField;
 
@@ -34,7 +36,7 @@ public class YearMonthField extends Field<JPanel, JPanel, LocalDate> {
 
     yearField.addValueChangeListener(event -> {
       // resetar el valor del mes si no se selecciono ningun año
-      if(yearField.isBlankItemSelected()){
+      if (yearField.isBlankItemSelected()) {
         monthField.resetState();
       }
 
