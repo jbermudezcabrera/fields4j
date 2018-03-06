@@ -26,7 +26,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
   private JButton viewButton;
   private JButton deleteButton;
 
-  private boolean editable;
+  private boolean editable = true;
 
   private ActionListener viewFileActionListener = null;
 
@@ -57,7 +57,9 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
 
     mainComponent.add(getValueComponent(), BorderLayout.CENTER);
     mainComponent.setBackground(getFieldStyle().getMainComponentBackground());
-    mainComponent.add(createButtonsPanel(), BorderLayout.EAST);
+    mainComponent.add(createButtonsPanel(), BorderLayout.LINE_END);
+
+    updateButtonState();
   }
 
   @Override
@@ -73,6 +75,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
   @Override
   public void setValue(String value) {
     getValueComponent().setValue(value);
+    updateButtonState();
   }
 
   @Override
@@ -83,14 +86,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
   @Override
   public void setEditable(boolean editable) {
     this.editable = editable;
-
-    if (browseButton != null) {
-      browseButton.setEnabled(editable);
-    }
-
-    if (deleteButton != null) {
-      deleteButton.setEnabled(editable);
-    }
+    updateButtonState();
   }
 
   public boolean isViewButtonVisible() {
@@ -99,6 +95,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
 
   public void setViewButtonVisible(boolean visible) {
     viewButton.setVisible(visible);
+    updateButtonState();
   }
 
   public boolean isDeleteButtonVisible() {
@@ -107,6 +104,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
 
   public void setDeleteButtonVisible(boolean visible) {
     deleteButton.setVisible(visible);
+    updateButtonState();
   }
 
   /**
@@ -152,9 +150,7 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
     JButton button = new JButton(FieldUtils.getIcon(iconPath));
     button.setRolloverIcon(FieldUtils.getIcon(rolloverIconPath));
 
-    button.setEnabled(false);
     button.addActionListener(event -> setValue(""));
-
     return button;
   }
 
@@ -176,8 +172,6 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
     JButton button = new JButton(FieldUtils.getIcon(iconPath));
     button.setRolloverIcon(FieldUtils.getIcon(rolloverIconPath));
     button.setToolTipText(BUNDLE.getString("viewTooltip"));
-
-    button.setEnabled(false);
 
     button.addActionListener(event -> {
       if (viewFileActionListener != null) {
@@ -211,5 +205,22 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
     });
 
     return button;
+  }
+
+  @SuppressWarnings("MethodWithMoreThanThreeNegations")
+  private void updateButtonState() {
+    boolean isEmpty = isEmpty();
+
+    if (browseButton != null) {
+      browseButton.setEnabled(editable);
+    }
+
+    if (deleteButton != null) {
+      deleteButton.setEnabled(editable && !isEmpty);
+    }
+
+    if (viewButton != null) {
+      viewButton.setEnabled(!isEmpty);
+    }
   }
 }
