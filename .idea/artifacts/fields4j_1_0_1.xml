@@ -1,8 +1,8 @@
 <component name="ArtifactManager">
-  <artifact build-on-make="true" name="fields4j-1.0.0">
-    <output-path>$PROJECT_DIR$/out/artifacts/fields4j_1_0_0</output-path>
+  <artifact build-on-make="true" name="fields4j-1.0.1">
+    <output-path>$PROJECT_DIR$/out/artifacts/fields4j_1_0_1</output-path>
     <root id="root">
-      <element id="archive" name="fields4j-1.0.0.jar">
+      <element id="archive" name="fields4j-1.0.1.jar">
         <element id="module-output" name="fields4j" />
       </element>
       <element id="library" level="project" name="commons-validator-1.6" />

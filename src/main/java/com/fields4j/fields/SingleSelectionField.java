@@ -28,6 +28,7 @@ import com.fields4j.FieldUtils;
 import com.fields4j.core.Field;
 import com.google.common.collect.ImmutableList;
 import com.jidesoft.hints.ListDataIntelliHints;
+import com.jidesoft.swing.JideSwingUtilities;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -284,6 +285,17 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
       internalSetItems(newCompletionList);
 
       setValue(transientItem);
+    }
+  }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+
+    JideSwingUtilities.setEnabledRecursively(getValueComponent(), enabled);
+
+    if (arrowButton != null) {
+      arrowButton.setEnabled(enabled);
     }
   }
 
