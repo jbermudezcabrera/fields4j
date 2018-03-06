@@ -22,6 +22,8 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
   private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
       "com/fields4j/resources/SingleFileField");
 
+  private final JPanel buttonsPanel;
+
   private JButton browseButton;
   private JButton viewButton;
   private JButton deleteButton;
@@ -57,7 +59,9 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
 
     mainComponent.add(getValueComponent(), BorderLayout.CENTER);
     mainComponent.setBackground(getFieldStyle().getMainComponentBackground());
-    mainComponent.add(createButtonsPanel(), BorderLayout.LINE_END);
+
+    buttonsPanel = createButtonsPanel();
+    mainComponent.add(buttonsPanel, BorderLayout.LINE_END);
 
     updateButtonState();
   }
@@ -75,6 +79,13 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
   @Override
   public void setValue(String value) {
     getValueComponent().setValue(value);
+    updateButtonState();
+  }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+
     updateButtonState();
   }
 
@@ -209,18 +220,19 @@ public class SingleFileField extends Field<JPanel, StringField, String> {
 
   @SuppressWarnings("MethodWithMoreThanThreeNegations")
   private void updateButtonState() {
-    boolean isEmpty = isEmpty();
+    boolean isFieldEmpty = isEmpty();
+    boolean isFieldEnabled = isEnabled();
 
     if (browseButton != null) {
-      browseButton.setEnabled(editable);
+      browseButton.setEnabled(isFieldEnabled && editable);
     }
 
     if (deleteButton != null) {
-      deleteButton.setEnabled(editable && !isEmpty);
+      deleteButton.setEnabled(isFieldEnabled && editable && !isFieldEmpty);
     }
 
     if (viewButton != null) {
-      viewButton.setEnabled(!isEmpty);
+      viewButton.setEnabled(isFieldEnabled && !isFieldEmpty);
     }
   }
 }
