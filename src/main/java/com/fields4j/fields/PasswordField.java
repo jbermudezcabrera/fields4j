@@ -2,7 +2,6 @@ package com.fields4j.fields;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javax.swing.JButton;
@@ -33,13 +32,13 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
 
     getMainComponent().setLayout(new BorderLayout(5, 5));
     getMainComponent().add(getValueComponent(), BorderLayout.CENTER);
-    getMainComponent().add(suggestPasswordBtn, BorderLayout.EAST);
+    getMainComponent().add(suggestPasswordBtn, BorderLayout.LINE_END);
 
     setPasswordSuggestionEnabled(false);
   }
 
   public void setPasswordSuggestionEnabled(boolean enabled) {
-    suggestPasswordBtn.setVisible(enabled);
+    suggestPasswordBtn.setVisible(enabled && isEditable());
   }
 
   @Override
@@ -50,11 +49,7 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
   @Override
   public String getValue() {
     char[] characters = getValueComponent().getPassword();
-    String password = String.valueOf(characters);
-
-    // recomendado por la documentacion del metodo getPassword()
-    Arrays.fill(characters, '0');
-    return password;
+    return String.valueOf(characters);
   }
 
   @Override
@@ -70,6 +65,10 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
   @Override
   public void setEditable(boolean editable) {
     getValueComponent().setEditable(editable);
+
+    if (!editable) {
+      setPasswordSuggestionEnabled(false);
+    }
 
     validateField();
   }
