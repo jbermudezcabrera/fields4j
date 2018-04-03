@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionListener;
@@ -20,27 +19,36 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicArrowButton;
-import javax.swing.text.JTextComponent;
 
 import com.fields4j.FieldUtils;
 import com.fields4j.core.Field;
+import com.fields4j.fields.internal.CustomListDataIntelliHints;
+import com.fields4j.fields.internal.CustomListDataIntelliHints.MatchMode;
 import com.google.common.collect.ImmutableList;
-import com.jidesoft.hints.ListDataIntelliHints;
 import com.jidesoft.swing.JideSwingUtilities;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 @SuppressWarnings("unchecked")
 public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, V> {
 
-  private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+  public static String globalTransientRemovalWarningTitle = null;
+  public static String globalTransientRemovalWarningFormat = null;
+
+  private static final ResourceBundle bundle = ResourceBundle.getBundle(
       "com/fields4j/resources/SingleSelectionField");
 
   private boolean blankItemPresent;
   private V blankItem = null;
-  private String blankItemText = BUNDLE.getString("blankChoice.text");
+  private String blankItemText = bundle.getString("blankChoice.text");
 
   private V transientItem = null;
 
@@ -56,6 +64,9 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
       getValueComponent(), new ArrayList<>());
 
   private JButton arrowButton = new BasicArrowButton(SwingConstants.SOUTH);
+
+  private String transientRemovalWarningTitle = null;
+  private String transientRemovalWarningFormat = null;
 
   /** Crea un nuevo {@code SingleSelectionField} sin la opción de agregar un elemento. */
   public SingleSelectionField() {
@@ -76,7 +87,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
 
     intelliHints.setCaseSensitive(false);
     intelliHints.setFollowCaret(false);
-    intelliHints.setMatchMode(CustomListDataIntelliHints.MatchMode.CONTAINS);
+    intelliHints.setMatchMode(MatchMode.CONTAINS);
 
     intelliHints.setFont(getFieldStyle().getLabelFont());
     intelliHints.setForegroundColor(getFieldStyle().getLabelForeground());
@@ -88,11 +99,16 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     changeListener = evt -> {
       if ("value".equalsIgnoreCase(evt.getPropertyName())) {
 
-        if (transientItem != null && Objects.equals(evt.getOldValue(), transientItem)) {
+        if ((transientItem != null) && Objects.equals(evt.getOldValue(), transientItem)) {
           // se deselecciono el transientItem
 
-          String title = BUNDLE.getString("transientRemovalWarning.title");
-          String format = BUNDLE.getString("transientRemovalWarning.format");
+          String title = globalTransientRemovalWarningTitle;
+          String format = globalTransientRemovalWarningFormat;
+
+          if (format == null) {
+            format = bundle.getString("transientRemovalWarning.format");
+          }
+
           String message = String.format(format, transientItem);
 
           Window parentWindow = SwingUtilities.getWindowAncestor(this);
@@ -158,6 +174,36 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     return component.getPreferredSize();
   }
 
+  public void setTransientRemovalWarningTitle(String transientRemovalWarningTitle) {
+    this.transientRemovalWarningTitle = transientRemovalWarningTitle;
+  }
+
+  public String getTransientRemovalWarningTitle() {
+    if(transientRemovalWarningTitle == null){
+      if(globalTransientRemovalWarningFormat == null){
+        return bundle.getString("transientRemovalWarning.title");
+      }
+
+      return globalTransientRemovalWarningTitle;
+    }
+    return transientRemovalWarningTitle;
+  }
+
+  public String getTransientRemovalWarningFormat() {
+    if(transientRemovalWarningFormat == null){
+      if(globalTransientRemovalWarningFormat == null){
+        return bundle.getString("transientRemovalWarning.format");
+      }
+
+      return globalTransientRemovalWarningFormat;
+    }
+    return transientRemovalWarningFormat;
+  }
+
+  public void setTransientRemovalWarningFormat(String transientRemovalWarningFormat) {
+    this.transientRemovalWarningFormat = transientRemovalWarningFormat;
+  }
+
   public String getBlankItemText() {
     return blankItemText;
   }
@@ -202,7 +248,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     JPanel tempPanel = new JPanel(new BorderLayout());
     tempPanel.setBackground(background);
     tempPanel.add(getValueComponent(), BorderLayout.CENTER);
-    tempPanel.add(arrowButton, BorderLayout.EAST);
+    tempPanel.add(arrowButton, BorderLayout.LINE_END);
 
     mainComponent.add(tempPanel, BorderLayout.CENTER);
 
@@ -211,7 +257,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     addOptionButton.setFocusable(visible && isEditable());
 
     if (visible) {
-      mainComponent.add(addOptionButton, BorderLayout.EAST);
+      mainComponent.add(addOptionButton, BorderLayout.LINE_END);
     }
 
     addOptionVisible = visible;
@@ -280,7 +326,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     } else {
       transientItem = value;
 
-      List<V> newCompletionList = new ArrayList<>(completionList);
+      Collection<V> newCompletionList = new ArrayList<>(completionList);
       newCompletionList.add(value);
       internalSetItems(newCompletionList);
 
@@ -345,7 +391,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
 
         // encontrar el nuevo elemento y establecerlo como el valor actual
         Optional<V> newItem = getLastNew(itemsBefore, itemsAfter);
-        newItem.ifPresent(SingleSelectionField.this::setValue);
+        newItem.ifPresent(this::setValue);
 
         // devolver el foco a la lista de opciones
         getValueComponent().requestFocusInWindow();
@@ -355,7 +401,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
 
   /** Devuelve todos los valores contenidos en el campo, sin incluir el elemento en blanco. */
   public List<V> getItems() {
-    List elements = new ArrayList();
+    Collection elements = new ArrayList();
 
     for (V item : intelliHints.getCompletionList()) {
       if (blankItemPresent && !blankItem.equals(item)) {
@@ -396,7 +442,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     return getItems().contains(item);
   }
 
-  private void internalSetItems(List<V> items) {
+  private void internalSetItems(Collection<V> items) {
     List<V> newElements = new ArrayList<>();
 
     if (blankItemPresent && !items.contains(blankItem)) {
@@ -426,7 +472,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     List<V> completionList = intelliHints.getCompletionList();
 
     if (blankItemPresent && !completionList.contains(blankItem)) {
-      List<V> newCompletionList = new ArrayList<>(completionList.size() + 1);
+      Collection<V> newCompletionList = new ArrayList<>(completionList.size() + 1);
 
       newCompletionList.add(blankItem);
       newCompletionList.addAll(completionList);
@@ -447,9 +493,9 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     return lastNew;
   }
 
-  private static class CustomDefaultFormatter extends JFormattedTextField.AbstractFormatter {
+  private static class CustomDefaultFormatter extends AbstractFormatter {
 
-    private List acceptedValues = new ArrayList<>();
+    private Collection acceptedValues = new ArrayList<>();
 
     @Override
     public Object stringToValue(String text) throws ParseException {
@@ -477,142 +523,3 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
   }
 }
 
-class CustomListDataIntelliHints<E> extends ListDataIntelliHints<E> {
-
-  private DefaultListCellRenderer listCellRenderer;
-
-  private MatchMode matchMode = MatchMode.STARTS_WTIH;
-
-  private Font font = null;
-  private Color foregroundColor = null;
-
-  CustomListDataIntelliHints(JTextComponent comp, List<E> completionList) {
-    super(comp, completionList);
-
-    listCellRenderer = new DefaultListCellRenderer() {
-      @Override
-      public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-                                                    boolean isSelected, boolean cellHasFocus) {
-
-        Component component = super.getListCellRendererComponent(list, value, index, isSelected,
-                                                                 cellHasFocus);
-
-        Object context = getContext();
-        String valueStr = "";
-
-        if ((context != null) && (value != null)) {
-          valueStr = value.toString();
-
-          Pair<Integer, Integer> range = getMatchRange(valueStr, context.toString());
-          Integer start = range.getLeft();
-          Integer end = range.getRight();
-
-          if ((start >= 0) && (end >= 0)) {
-            String beforeMatch = valueStr.substring(0, start);
-            String afterMatch = valueStr.substring(end);
-
-            String match = valueStr.substring(start, end);
-
-            int R = foregroundColor.getRed();
-            int G = foregroundColor.getGreen();
-            int B = foregroundColor.getBlue();
-
-            String format = "<html>%s<strong style='color: rgb(%d,%d,%d)'>%s</strong>%s</html>";
-            valueStr = String.format(format, beforeMatch, R, G, B, match, afterMatch);
-          }
-        }
-
-        ((JLabel) component).setText(valueStr);
-        component.setFont(font);
-        return component;
-      }
-    };
-  }
-
-  @Override
-  public JComponent createHintsComponent() {
-    JComponent hintsComponent = super.createHintsComponent();
-
-    getList().setCellRenderer(listCellRenderer);
-
-    return hintsComponent;
-  }
-
-  @Override
-  public boolean updateHints(Object context) {
-    if (context != null) {
-      String contextStr = context.toString();
-      JTextComponent textComponent = getTextComponent();
-
-      boolean allTextSelected = contextStr.equals(textComponent.getSelectedText());
-
-      if (allTextSelected) {
-        setListData(getCompletionList().toArray());
-        return true;
-      }
-    }
-
-    return super.updateHints(context);
-  }
-
-  @Override
-  protected boolean compare(Object context, E element) {
-    String listEntry = (element == null) ? "" : element.toString();
-    String contextStr = context.toString();
-
-    Pair<Integer, Integer> match = getMatchRange(listEntry, contextStr);
-
-    switch (matchMode) {
-      case STARTS_WTIH:
-        return match.getLeft() == 0;
-
-      case CONTAINS:
-        return match.getLeft() >= 0;
-    }
-
-    return false;
-  }
-
-  @Override
-  public void acceptHint(Object selected) {
-    super.acceptHint(selected);
-
-    if (getTextComponent() instanceof JFormattedTextField) {
-      ((JFormattedTextField) getTextComponent()).setValue(selected);
-    }
-
-    getTextComponent().selectAll();
-  }
-
-  void setForegroundColor(Color foregroundColor) {
-    this.foregroundColor = foregroundColor;
-  }
-
-  void setFont(Font font) {
-    this.font = font.deriveFont(Font.PLAIN);
-  }
-
-  MatchMode getMatchMode() {
-    return matchMode;
-  }
-
-  void setMatchMode(MatchMode matchMode) {
-    this.matchMode = matchMode;
-  }
-
-  private Pair<Integer, Integer> getMatchRange(String str, String pattern) {
-    int start;
-
-    if (isCaseSensitive()) {
-      start = str.indexOf(pattern);
-    } else {
-      start = StringUtils.indexOfIgnoreCase(str, pattern);
-    }
-
-    return Pair.of(start, start + pattern.length());
-  }
-
-  enum MatchMode {
-    STARTS_WTIH, CONTAINS
-  }
-}
