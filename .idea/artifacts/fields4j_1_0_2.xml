@@ -1,9 +1,12 @@
 <component name="ArtifactManager">
-  <artifact build-on-make="true" name="fields4j-1.0.1">
-    <output-path>$PROJECT_DIR$/out/artifacts/fields4j_1_0_1</output-path>
+  <artifact build-on-make="true" name="fields4j-1.0.2">
+    <output-path>$PROJECT_DIR$/out/artifacts/fields4j_1_0_2</output-path>
     <root id="root">
-      <element id="archive" name="fields4j-1.0.1.jar">
+      <element id="archive" name="fields4j-1.0.2.jar">
         <element id="module-output" name="fields4j" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/main/META-INF/MANIFEST.MF" />
+        </element>
       </element>
       <element id="library" level="project" name="commons-validator-1.6" />
       <element id="library" level="project" name="commons-lang3-3.6" />
