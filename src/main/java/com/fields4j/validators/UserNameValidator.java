@@ -11,6 +11,6 @@ public class UserNameValidator extends RegExpValidator {
   }
 
   public UserNameValidator(String message) {
-    super("[a-zA-Z]\\w*", message);
+    super("[a-zA-Z][a-zA-Z0-9]*", message);
   }
 }
