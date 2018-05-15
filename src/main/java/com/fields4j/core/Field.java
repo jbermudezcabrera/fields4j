@@ -214,6 +214,10 @@ public abstract class Field<MC extends JComponent, VC extends JComponent, V> ext
     setValue(value);
   }
 
+  public V getInitialValue(){
+    return initialValue;
+  }
+
   /**
    * Devuelve {@code true} si el valor de este campo puede ser modificado por el usuario. La
    * implementación por defecto deduce el resultado a partir de si el campo está habilitado, {@code
