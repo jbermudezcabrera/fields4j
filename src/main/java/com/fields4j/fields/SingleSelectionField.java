@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.text.DefaultFormatterFactory;
 
 import com.fields4j.FieldUtils;
 import com.fields4j.core.Field;
@@ -68,6 +69,8 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
   private String transientRemovalWarningTitle = null;
   private String transientRemovalWarningFormat = null;
 
+  private Comparator<V> itemsComparator = null;
+
   /** Crea un nuevo {@code SingleSelectionField} sin la opción de agregar un elemento. */
   public SingleSelectionField() {
     this(false);
@@ -82,7 +85,10 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
    *                         elemento.
    */
   public SingleSelectionField(boolean addOptionVisible) {
-    super(new JPanel(), new JFormattedTextField(new CustomDefaultFormatter()));
+    super(new JPanel(), new JFormattedTextField());
+    getValueComponent().setFormatterFactory(
+        new DefaultFormatterFactory(new CustomDefaultFormatter()));
+
     setText(getClass().getSimpleName());
 
     intelliHints.setCaseSensitive(false);
@@ -174,13 +180,9 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     return component.getPreferredSize();
   }
 
-  public void setTransientRemovalWarningTitle(String transientRemovalWarningTitle) {
-    this.transientRemovalWarningTitle = transientRemovalWarningTitle;
-  }
-
   public String getTransientRemovalWarningTitle() {
-    if(transientRemovalWarningTitle == null){
-      if(globalTransientRemovalWarningFormat == null){
+    if (transientRemovalWarningTitle == null) {
+      if (globalTransientRemovalWarningFormat == null) {
         return bundle.getString("transientRemovalWarning.title");
       }
 
@@ -189,9 +191,13 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     return transientRemovalWarningTitle;
   }
 
+  public void setTransientRemovalWarningTitle(String transientRemovalWarningTitle) {
+    this.transientRemovalWarningTitle = transientRemovalWarningTitle;
+  }
+
   public String getTransientRemovalWarningFormat() {
-    if(transientRemovalWarningFormat == null){
-      if(globalTransientRemovalWarningFormat == null){
+    if (transientRemovalWarningFormat == null) {
+      if (globalTransientRemovalWarningFormat == null) {
         return bundle.getString("transientRemovalWarning.format");
       }
 
@@ -321,7 +327,9 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     JFormattedTextField valueComponent = getValueComponent();
     List<V> completionList = intelliHints.getCompletionList();
 
-    if (completionList.contains(value)) {
+    boolean isPresent = internalContains(completionList, value);
+
+    if (isPresent) {
       valueComponent.setValue(value);
     } else {
       transientItem = value;
@@ -367,6 +375,10 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
       setInitialValue(blankItem);
     }
     super.resetState();
+  }
+
+  public void setItemsComparator(Comparator<V> itemsComparator) {
+    this.itemsComparator = itemsComparator;
   }
 
   /**
@@ -439,7 +451,20 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
 
   /** Devuelve {@code true} si el elemento dado es uno de los elementos seleccionables del campo. */
   public boolean contains(V item) {
-    return getItems().contains(item);
+    return internalContains(getItems(), item);
+  }
+
+  private boolean internalContains(Collection<V> collection, V value) {
+    if (itemsComparator == null) {
+      return collection.contains(value);
+    }
+
+    return collection.stream().anyMatch(v -> {
+      if ((v == blankItem) || (value == blankItem)) {
+        return v == value;
+      }
+      return itemsComparator.compare(v, value) == 0;
+    });
   }
 
   private void internalSetItems(Collection<V> items) {
@@ -485,7 +510,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     Optional<V> lastNew = Optional.empty();
 
     for (V element : after) {
-      if (!before.contains(element)) {
+      if (!internalContains(before, element)) {
         lastNew = Optional.of(element);
       }
     }
@@ -493,7 +518,7 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     return lastNew;
   }
 
-  private static class CustomDefaultFormatter extends AbstractFormatter {
+  private class CustomDefaultFormatter extends AbstractFormatter {
 
     private Collection acceptedValues = new ArrayList<>();
 
@@ -510,11 +535,11 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
 
     @Override
     public String valueToString(Object value) throws ParseException {
-      if (acceptedValues.contains(value)) {
+      if (internalContains(acceptedValues, (V) value)) {
         return (value == null) ? "" : value.toString();
       }
 
-      throw new ParseException("", 0);
+      throw new ParseException(String.format("error[%s]", value), 0);
     }
 
     void setAcceptedValues(List acceptedValues) {
