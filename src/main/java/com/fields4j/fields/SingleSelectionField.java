@@ -108,17 +108,13 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
         if ((transientItem != null) && Objects.equals(evt.getOldValue(), transientItem)) {
           // se deselecciono el transientItem
 
-          String title = globalTransientRemovalWarningTitle;
-          String format = globalTransientRemovalWarningFormat;
+          String warningTitle = getTransientRemovalWarningTitle();
+          String warningFormat = getTransientRemovalWarningFormat();
 
-          if (format == null) {
-            format = bundle.getString("transientRemovalWarning.format");
-          }
-
-          String message = String.format(format, transientItem);
+          String message = String.format(warningFormat, transientItem);
 
           Window parentWindow = SwingUtilities.getWindowAncestor(this);
-          int choice = JOptionPane.showConfirmDialog(parentWindow, message, title,
+          int choice = JOptionPane.showConfirmDialog(parentWindow, message, warningTitle,
                                                      JOptionPane.OK_CANCEL_OPTION,
                                                      JOptionPane.QUESTION_MESSAGE);
 
