@@ -320,6 +320,11 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
    */
   @Override
   public void setValue(V value) {
+    if (value == null) {
+      resetState();
+      return;
+    }
+
     JFormattedTextField valueComponent = getValueComponent();
     List<V> completionList = intelliHints.getCompletionList();
 
