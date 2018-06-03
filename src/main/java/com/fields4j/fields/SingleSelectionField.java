@@ -359,6 +359,8 @@ public class SingleSelectionField<V> extends Field<JPanel, JFormattedTextField, 
     getValueComponent().setEnabled(editable);
     getValueComponent().setFocusable(editable);
 
+    requiredLabel.setVisible(editable && isRequired());
+
     if (addOptionButton != null) {
       addOptionButton.setVisible(editable && addOptionVisible);
     }

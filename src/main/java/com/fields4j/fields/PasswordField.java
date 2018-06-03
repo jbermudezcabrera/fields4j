@@ -70,6 +70,7 @@ public class PasswordField extends Field<JPanel, JPasswordField, String> {
       setPasswordSuggestionEnabled(false);
     }
 
+    requiredLabel.setVisible(editable && isRequired());
     validateField();
   }
 

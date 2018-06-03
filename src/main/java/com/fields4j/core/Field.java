@@ -8,7 +8,7 @@ import java.awt.TextField;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.swing.BorderFactory;
@@ -53,7 +53,7 @@ public abstract class Field<MC extends JComponent, VC extends JComponent, V> ext
   protected Border defaultBorder;
 
   private JLabel textLabel = new JLabel();
-  private JLabel requiredLabel = new JLabel();
+  protected JLabel requiredLabel = new JLabel();
 
   private MC mainComponent;
   private VC valueComponent;
@@ -62,7 +62,7 @@ public abstract class Field<MC extends JComponent, VC extends JComponent, V> ext
 
   private String tooltipBackup = null;
 
-  private List<Validator<V>> validators = new ArrayList<>();
+  private Collection<Validator<V>> validators = new ArrayList<>();
   private boolean isRequired = false;
 
   private V initialValue;
@@ -170,7 +170,7 @@ public abstract class Field<MC extends JComponent, VC extends JComponent, V> ext
   public void setLabelsVisible(boolean labelsVisible) {
     this.labelsVisible = labelsVisible;
     textLabel.setVisible(labelsVisible);
-    requiredLabel.setVisible(labelsVisible);
+    requiredLabel.setVisible(labelsVisible && isRequired());
 
     updateLayout();
   }
@@ -234,6 +234,7 @@ public abstract class Field<MC extends JComponent, VC extends JComponent, V> ext
    */
   public void setEditable(boolean editable) {
     valueComponent.setEnabled(editable);
+    requiredLabel.setVisible(editable && isRequired());
 
     validateField();
   }

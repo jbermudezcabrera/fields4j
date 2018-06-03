@@ -64,6 +64,7 @@ public class DirectorySelectionField extends Field<JPanel, StringField, String> 
   @Override
   public void setEditable(boolean editable) {
     this.editable = editable;
+    requiredLabel.setVisible(editable && isRequired());
 
     if (browseButton != null) {
       browseButton.setEnabled(editable);
