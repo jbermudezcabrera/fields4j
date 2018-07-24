@@ -21,6 +21,7 @@ public class MonthField
     }
 
     getValueComponent().setItems(months);
+    getValueComponent().setLabelsVisible(false);
     getValueComponent().addValueChangeListener(event -> fireValueChangeEvent(null, null));
   }
 
@@ -42,7 +43,7 @@ public class MonthField
   @Override
   public void setLabelsVisible(boolean labelsVisible) {
     super.setLabelsVisible(labelsVisible);
-    getValueComponent().setLabelsVisible(labelsVisible);
+    getValueComponent().setLabelsVisible(false);
   }
 
   @Override
